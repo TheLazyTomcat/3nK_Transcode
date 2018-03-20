@@ -8,5 +8,5 @@ uses
   SII_3nK_Transcode_Program in '..\SII_3nK_Transcode_Program.pas';
 
 begin
-  { TODO -oUser -cConsole Main : Insert code here }
+  SII_3nK_Transcode_Program.Main;
 end.

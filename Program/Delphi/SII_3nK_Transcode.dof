@@ -94,7 +94,7 @@ OutputDir=Release\win_x86
 UnitOutputDir=.\DCU
 PackageDLLOutputDir=
 PackageDCPOutputDir=
-SearchPath=
+SearchPath=..\..\Source\Libs
 Packages=vcl;rtl;vclx;VclSmp;vclshlctrls;_AltFixUnit;_GlobalInstanceControl;_XPAdminMan;AdvCircularProgressPkgD7;TMSMenusD7;AdvShaperPkgD7;_alignedit;_ALProgressBar;_SuperLabel;_ButtonComps;_PJVersionInfo;EZJTexturePanelD6;FormShapePkgD7;GradientLabelPkgD7;_adpInstanceControl;_Label3D;_lfreg;_FadeWorks;_MMJLabel;PNGDelphi;_AlphaShowHide;_QProgBar;_ShadowLabel;_VistaAltFixUnit;shape;_XiButton;GR32_D7
 Conditionals=
 DebugSourceDirs=
@@ -133,6 +133,9 @@ Comments=
 [HistoryLists\hlUnitAliases]
 Count=1
 Item0=WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE;
+[HistoryLists\hlSearchPath]
+Count=1
+Item0=..\..\Source\Libs
 [HistoryLists\hlUnitOutputDirectory]
 Count=1
 Item0=.\DCU
