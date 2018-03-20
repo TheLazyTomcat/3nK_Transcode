@@ -254,28 +254,32 @@ var
   Buff:       TMemoryBuffer;
   ActualReg:  Int64;
 begin
-If Is3nKStream(Input) then
+If Input <> Output then
   begin
-    // read header
-    Input.ReadBuffer(Header{%H-},SizeOf(Header));
-    ActualReg := Int64(Header.Seed);
-    fSeed := Header.Seed;
-    // decode data
-    GetBuffer(Buff,SII_3nK_BufferSize);
-    try
-      repeat
-        Buff.Data := Input.Read(Buff.Memory^,Buff.Size);
-        TranscodeBuffer(Buff.Memory^,Buff.Data,ActualReg);
-        Output.WriteBuffer(Buff.Memory^,Buff.Data);
-        ActualReg := ActualReg + Int64(Buff.Data);
-      until Buff.Data < PtrInt(Buff.Size);
-    finally
-      FreeBuffer(Buff);
-    end;
-    If RectifySize then
-      Output.Size := Output.Position;
+    If Is3nKStream(Input) then
+      begin
+        // read header
+        Input.ReadBuffer(Header{%H-},SizeOf(Header));
+        ActualReg := Int64(Header.Seed);
+        fSeed := Header.Seed;
+        // decode data
+        GetBuffer(Buff,SII_3nK_BufferSize);
+        try
+          repeat
+            Buff.Data := Input.Read(Buff.Memory^,Buff.Size);
+            TranscodeBuffer(Buff.Memory^,Buff.Data,ActualReg);
+            Output.WriteBuffer(Buff.Memory^,Buff.Data);
+            ActualReg := ActualReg + Int64(Buff.Data);
+          until Buff.Data < PtrInt(Buff.Size);
+        finally
+          FreeBuffer(Buff);
+        end;
+        If RectifySize then
+          Output.Size := Output.Position;
+      end
+    else raise Exception.Create('TSII_3nK_Transcoder.DecodeStream: Input stream is not a valid 3nK stream.');
   end
-else raise Exception.Create('TSII_3nK_Transcoder.DecodeStream: Input stream is not a valid 3nK stream.');
+else raise Exception.Create('TSII_3nK_Transcoder.DecodeStream: Input and output streams are the same, data would be corrupted.');
 end;
 
 //------------------------------------------------------------------------------
