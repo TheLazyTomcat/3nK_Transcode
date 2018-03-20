@@ -1,5 +1,7 @@
 unit SII_3nK_Transcoder;
 
+{$INCLUDE 'SII_3nK_defs.inc'}
+
 interface
 
 uses
@@ -53,7 +55,6 @@ type
     procedure ProcessFileInMemory(const InFileName, OutFileName: String; Routine: TSII_3nK_ProcRoutine); virtual;
   public
     constructor Create;
-    destructor Destroy; override;
     Function Is3nKStream(Stream: TStream): Boolean; virtual;
     Function Is3nKFile(const FileName: String): Boolean; virtual;    
     procedure EncodeStream(Input, Output: TStream; RectifySize: Boolean = True); virtual;
@@ -145,13 +146,6 @@ begin
 inherited;
 fSeed := 0;
 Randomize;
-end;
-
-//------------------------------------------------------------------------------
-
-destructor TSII_3nK_Transcoder.Destroy;
-begin
-inherited;
 end;
 
 //------------------------------------------------------------------------------
