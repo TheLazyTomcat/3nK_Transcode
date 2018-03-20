@@ -1,3 +1,10 @@
+{-------------------------------------------------------------------------------
+
+  This Source Code Form is subject to the terms of the Mozilla Public
+  License, v. 2.0. If a copy of the MPL was not distributed with this
+  file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+-------------------------------------------------------------------------------}
 unit SII_3nK_Transcoder;
 
 {$INCLUDE 'SII_3nK_defs.inc'}
@@ -20,9 +27,9 @@ const
   SII_3nK_MinSize   = SizeOf(SII_3nK_Header); // 6 bytes
 
 {
-  Key table entries were calculated by this formula:
+  Key table entries were calculated from this formula:
 
-    Key[i] = ((i shl 2) xor not i) shl 3) xor i
+    Key[i] = (((i shl 2) xor not i) shl 3) xor i
 }
   SII_3nK_KeyTable: array[Byte] of Byte = (
     $F8, $D1, $AA, $83, $5C, $75, $0E, $27, $B0, $99, $E2, $CB, $14, $3D, $46, $6F,
@@ -42,9 +49,17 @@ const
     $18, $31, $4A, $63, $BC, $95, $EE, $C7, $50, $79, $02, $2B, $F4, $DD, $A6, $8F,
     $88, $A1, $DA, $F3, $2C, $05, $7E, $57, $C0, $E9, $92, $BB, $64, $4D, $36, $1F);
 
+{===============================================================================
+--------------------------------------------------------------------------------
+                               TSII_3nK_Transcoder
+--------------------------------------------------------------------------------
+===============================================================================}
 type
   TSII_3nK_ProcRoutine = procedure(Input, Output: TStream; RectifySize: Boolean = True) of object;
 
+{===============================================================================
+    TSII_3nK_Transcoder - declaration
+===============================================================================}
   TSII_3nK_Transcoder = class(TObject)
   private
     fSeed:  UInt8;
@@ -76,15 +91,31 @@ uses
   SysUtils,
   StrRect, BinaryStreaming, MemoryBuffer;
 
+{===============================================================================
+--------------------------------------------------------------------------------
+                               TSII_3nK_Transcoder
+--------------------------------------------------------------------------------
+===============================================================================}
+
 const
   SII_3nK_BufferSize = 16 * 1024; // 16KiB
+
+{===============================================================================
+    TSII_3nK_Transcoder - implementation
+===============================================================================}
+
+{-------------------------------------------------------------------------------
+    TSII_3nK_Transcoder - private methods
+-------------------------------------------------------------------------------}
 
 Function TSII_3nK_Transcoder.GetKey(Index: Integer): Byte;
 begin
 Result := SII_3nK_KeyTable[Byte(Index)];
 end;
 
-//------------------------------------------------------------------------------
+{-------------------------------------------------------------------------------
+    TSII_3nK_Transcoder - protected methods
+-------------------------------------------------------------------------------}
 
 procedure TSII_3nK_Transcoder.TranscodeBuffer(var Buff; Size: TMemSize; Seed: Int64);
 var
@@ -92,8 +123,8 @@ var
 begin
 If Size > 0 then
   For i := 0 to Pred(Size) do
-    PByte(PtrUInt(@Buff) + PtrUInt(i))^ := PByte(PtrUInt(@Buff) + PtrUInt(i))^ xor
-                                           SII_3nK_KeyTable[Byte(Seed + i)];
+    {%H-}PByte({%H-}PtrUInt(@Buff) + PtrUInt(i))^ :=
+      {%H-}PByte({%H-}PtrUInt(@Buff) + PtrUInt(i))^ xor SII_3nK_KeyTable[Byte(Seed + i)];
 end;
 
 //------------------------------------------------------------------------------
@@ -125,12 +156,12 @@ var
 begin
 InputStream := TMemoryStream.Create;
 try
-  InputStream.LoadFromFile(InFileName);
+  InputStream.LoadFromFile(StrToRTL(InFileName));
   OutputStream := TMemoryStream.Create;
   try
     OutputStream.Size := InputStream.Size;
     Routine(InputStream,OutputStream,True);
-    OutputStream.SaveToFile(OutFileName);
+    OutputStream.SaveToFile(StrToRTL(OutFileName));
   finally
     OutputStream.Free;
   end;
@@ -139,7 +170,9 @@ finally
 end;
 end;
 
-//------------------------------------------------------------------------------
+{-------------------------------------------------------------------------------
+    TSII_3nK_Transcoder - public methods
+-------------------------------------------------------------------------------}
 
 constructor TSII_3nK_Transcoder.Create;
 begin
@@ -156,7 +189,7 @@ var
 begin
 If (Stream.Size - Stream.Position) >= SII_3nK_MinSize then
   begin
-    Stream_ReadBuffer(Stream,Header,SizeOf(Header),False);
+    Stream_ReadBuffer(Stream,Header{%H-},SizeOf(Header),False);
     Result := Header.Signature = SII_3nK_Signature;
     If Result then
       fSeed := Header.Seed;
@@ -226,7 +259,7 @@ If Input <> Output then
     If Is3nKStream(Input) then
       begin
         // read header
-        Input.ReadBuffer(Header,SizeOf(Header));
+        Input.ReadBuffer(Header{%H-},SizeOf(Header));
         ActualReg := Int64(Header.Seed);
         fSeed := Header.Seed;
         // decode data

@@ -7,13 +7,16 @@
 -------------------------------------------------------------------------------}
 program SII_3nK_Transcode;
 
-{$APPTYPE CONSOLE}
+{$mode objfpc}{$H+}
 
 uses
-  SysUtils,
-  SII_3nK_Transcoder in '..\..\Source\SII_3nK_Transcoder.pas',
-  SII_3nK_Transcode_Program in '..\SII_3nK_Transcode_Program.pas';
+  {$IFDEF UNIX}{$IFDEF UseCThreads}
+  cthreads,
+  {$ENDIF}{$ENDIF}
+  Classes, SII_3nK_Transcoder, SII_3nK_Transcode_Program
+  { you can add units after this };
 
 begin
   SII_3nK_Transcode_Program.Main;
 end.
+
