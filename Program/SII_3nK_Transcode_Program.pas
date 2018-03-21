@@ -17,6 +17,7 @@ implementation
 
 uses
   SysUtils,
+  StrRect,
   SII_3nK_Transcoder;
 
 procedure Main;
@@ -44,9 +45,9 @@ try
       WriteLn;
       WriteLn('Transcoding, please wait...');
       If ParamCount > 1 then
-        TranscodeFileInMemory(ParamStr(1),ParamStr(2))
+        TranscodeFileInMemory(RTLToStr(ParamStr(1)),RTLToStr(ParamStr(2)))
       else
-        TranscodeFileInMemory(ParamStr(1),ParamStr(1));
+        TranscodeFileInMemory(RTLToStr(ParamStr(1)),RTLToStr(ParamStr(1)));
     finally
       Free;
     end;
@@ -55,7 +56,7 @@ except
     begin
       WriteLn('An error has occured. Error message:');
       WriteLn;
-      WriteLn('  ',E.Message);
+      WriteLn('  ',StrToCsl(E.Message));
       WriteLn;
       Write('Press enter to continue...'); ReadLn;
     end;
