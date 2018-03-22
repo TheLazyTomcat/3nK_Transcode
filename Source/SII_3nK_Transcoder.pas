@@ -177,7 +177,6 @@ try
   InputStream.LoadFromFile(StrToRTL(InFileName));
   OutputStream := TMemoryStream.Create;
   try
-    OutputStream.Size := InputStream.Size;
     Routine(InputStream,OutputStream,True);
     OutputStream.SaveToFile(StrToRTL(OutFileName));
   finally
@@ -246,6 +245,9 @@ If Input <> Output then
     Header.Seed := UInt8(Random(High(Byte) + 1));
     fSeed := Header.Seed;
     ActualReg := fSeed;
+    // output preallocation
+    If (Output.Size - Output.Position) < ((Input.Size - Input.Position) + SizeOf(Header)) then
+      Output.Size := Output.Size + ((Input.Size - Input.Position) + SizeOf(Header));
     // write header to output
     Output.WriteBuffer(Header,SizeOf(Header));
     // encode data
@@ -289,7 +291,10 @@ If Input <> Output then
         // read header
         Input.ReadBuffer(Header{%H-},SizeOf(Header));
         ActualReg := Int64(Header.Seed);
-        fSeed := Header.Seed;
+        fSeed := Header.Seed;        
+        // output preallocation
+        If (Output.Size - Output.Position) < ((Input.Size - Input.Position)) then
+          Output.Size := Output.Size + (Input.Size - Input.Position);
         // decode data
         If (Input.Size - Input.Position) > 0 then
           begin
