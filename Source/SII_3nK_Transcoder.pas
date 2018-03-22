@@ -236,6 +236,7 @@ var
   Buff:           TMemoryBuffer;
   ActualReg:      Int64;
   ProgressStart:  Int64;
+  TempPos:        Int64;
 begin
 If Input <> Output then
   begin
@@ -246,8 +247,13 @@ If Input <> Output then
     fSeed := Header.Seed;
     ActualReg := fSeed;
     // output preallocation
-    If (Output.Size - Output.Position) < ((Input.Size - Input.Position) + SizeOf(Header)) then
-      Output.Size := Output.Size + ((Input.Size - Input.Position) + SizeOf(Header));
+    TempPos := Output.Position;
+    try
+      If (Output.Size - Output.Position) < ((Input.Size - Input.Position) + SizeOf(Header)) then
+        Output.Size := Output.Size + ((Input.Size - Input.Position) + SizeOf(Header));
+    finally
+      Output.Position := TempPos;
+    end;
     // write header to output
     Output.WriteBuffer(Header,SizeOf(Header));
     // encode data
@@ -282,6 +288,7 @@ var
   Buff:           TMemoryBuffer;
   ActualReg:      Int64;
   ProgressStart:  Int64;
+  TempPos:        Int64;
 begin
 If Input <> Output then
   begin
@@ -293,8 +300,13 @@ If Input <> Output then
         ActualReg := Int64(Header.Seed);
         fSeed := Header.Seed;        
         // output preallocation
-        If (Output.Size - Output.Position) < ((Input.Size - Input.Position)) then
-          Output.Size := Output.Size + (Input.Size - Input.Position);
+        TempPos := Output.Position;
+        try
+          If (Output.Size - Output.Position) < ((Input.Size - Input.Position)) then
+            Output.Size := Output.Size + (Input.Size - Input.Position);
+        finally
+          Output.Position := TempPos;
+        end;
         // decode data
         If (Input.Size - Input.Position) > 0 then
           begin
