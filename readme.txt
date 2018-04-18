@@ -42,8 +42,8 @@ Repositories
 You can get actual copies of SII 3nK Transcode project on either of these git
 repositories:
 
-https://github.com/ncs-sniper/SII_3nK_Transcode
-https://bitbucket.org/ncs-sniper/sii_3nk_transcode
+https://github.com/ncs-sniper/3nK_Transcode
+https://bitbucket.org/ncs-sniper/3nk_transcode
 
 Note - master branch does not contain binaries, you can find them in a branch
        called "bin".
