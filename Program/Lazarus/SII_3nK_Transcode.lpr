@@ -13,7 +13,7 @@ uses
   {$IFDEF UNIX}{$IFDEF UseCThreads}
   cthreads,
   {$ENDIF}{$ENDIF}
-  Classes, SII_3nK_Transcoder, SII_3nK_Transcode_Program
+  Classes, SII_3nK_Transcode_Program
   { you can add units after this };
 
 begin
