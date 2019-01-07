@@ -23,10 +23,10 @@ uses
 procedure Main;
 begin
 try
-  WriteLn('****************************************');
-  WriteLn('*    SII 3nK Transcoder program 1.0    *');
-  WriteLn('*       (c) 2018 Frantisek Milt        *');
-  WriteLn('****************************************');
+  WriteLn('******************************************');
+  WriteLn('*    SII 3nK Transcoder program 1.0.1    *');
+  WriteLn('*        (c) 2018 Frantisek Milt         *');
+  WriteLn('******************************************');
   If ParamCount <= 0 then
     begin
       WriteLn;

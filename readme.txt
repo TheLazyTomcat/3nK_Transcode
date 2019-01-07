@@ -44,6 +44,7 @@ repositories:
 
 https://github.com/ncs-sniper/3nK_Transcode
 https://bitbucket.org/ncs-sniper/3nk_transcode
+https://gitlab.com/ncs-sniper/3nK_Transcode
 
 Note - master branch does not contain binaries, you can find them in a branch
        called "bin".
@@ -70,4 +71,4 @@ https://www.paypal.me/FMilt
 
 Copyright
 ----------------------------------------
-©2018 František Milt, all rights reserved
+©2018-2019 František Milt, all rights reserved
